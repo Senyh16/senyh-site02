@@ -1,0 +1,130 @@
+/* Page Background */
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #000;
+    margin: 0;
+    text-align: center;
+}
+
+/* Headers */
+h1, h2 {
+    text-shadow: 3px 3px #ffcc00;
+    margin: 20px 0;
+}
+
+/* Cartoony Buttons */
+button {
+    font-family: 'Comic Sans MS', cursive;
+    background: linear-gradient(145deg, #ffcc00, #ffd633);
+    color: #000;
+    border: 5px solid #000;
+    border-radius: 30px;
+    padding: 20px 50px; /* BIG & cartoony */
+    font-size: 32px;    /* BIG FONT */
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 6px 6px 0 #000;
+}
+
+button:hover {
+    transform: scale(1.35) rotate(-5deg);
+    background: linear-gradient(145deg, #ffd633, #ffeb66);
+    box-shadow: 8px 8px 0 #000;
+}
+
+/* Sections */
+section {
+    padding: 40px;
+    margin: 20px auto;
+    border: 4px solid #000;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(255, 248, 220, 0.95);
+    box-shadow: 5px 5px 0 #000;
+}
+
+/* Current Number Box */
+#current-number {
+    font-size: 80px;
+    width: 150px;
+    height: 150px;
+    background: #ffcc00;
+    border: 5px solid #000;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px auto;
+    box-shadow: 4px 4px 0 #000;
+}
+
+/* End Screen GUI */
+#end-screen {
+    font-family: 'Comic Sans MS', cursive;
+    box-shadow: 5px 5px 0 #000;
+    background: #ffcc00;
+    border-radius: 20px;
+    width: 300px;
+    height: 250px;
+    position: fixed;
+    top:50%; left:50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    display: none;
+    z-index: 9999;
+}
+
+/* End Screen Buttons */
+#end-screen button {
+    font-size: 30px;
+    padding: 22px 50px;
+    background: linear-gradient(145deg, #00ccff, #00ffff);
+    border-radius: 25px;
+    border: 3px solid #000;
+}
+
+#end-screen button:hover {
+    transform: scale(1.35) rotate(5deg);
+    background: linear-gradient(145deg, #00ffff, #33e6ff);
+    box-shadow: 8px 8px 0 #000;
+}
+
+/* Intro Screen */
+#intro-screen {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background:#1a1a1a; color:#fff;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    z-index:10000;
+}
+
+#intro-screen h1 {
+    font-size: 60px;
+    color: #ffcc00;
+    text-shadow: 3px 3px #000;
+    margin-bottom: 40px;
+}
+
+#intro-screen button {
+    font-size: 36px;
+    padding: 25px 60px;
+    border-radius: 30px;
+    background: linear-gradient(145deg, #00ccff, #00ffff);
+    box-shadow: 6px 6px 0 #000;
+}
+
+#intro-screen button:hover {
+    transform: scale(1.35) rotate(-5deg);
+    background: linear-gradient(145deg, #00ffff, #33e6ff);
+    box-shadow: 8px 8px 0 #000;
+}
+
+/* Score and Timer */
+#score, #time-left, #high-score {
+    font-size: 28px;
+    font-weight: bold;
+}

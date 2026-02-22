@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senyh Site - Main Hub</title>
+    <link rel="stylesheet" href="game-style.css">
+</head>
+<body>
+
+    <!-- Main Hub / Menu -->
+    <div id="intro-screen">
+        <h1>SENYH SITE</h1>
+        <h2>Choose a Game</h2>
+        <button class="game-btn" data-game="number-key-game">Press The Right Number Game</button>
+        <!-- Later you can add more games here -->
+        <!-- <button class="game-btn" data-game="other-game">Another Game</button> -->
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bgm" src="bgm.mp3" loop></audio>
+
+    <!-- Game Section -->
+    <section id="game-section" style="display:none; position: relative;">
+        <button id="back-btn">← Back</button>
+        <h2>Press the number that appears!</h2>
+        <p>Time left: <span id="time-left">30</span> seconds</p>
+        <p>Score: <span id="score">0</span></p>
+        <p>High Score: <span id="high-score">0</span></p>
+        <div id="current-number"></div>
+
+        <!-- End Screen GUI -->
+        <div id="end-screen">
+            <h1>Time's Up!</h1>
+            <p>Your Score: <span id="final-score">0</span></p>
+            <p>High Score: <span id="final-highscore">0</span></p>
+            <button onclick="playAgain()">Play Again</button>
+        </div>
+    </section>
+
+    <script>
+        const bgm = document.getElementById('bgm');
+        const introScreen = document.getElementById('intro-screen');
+        const gameSection = document.getElementById('game-section');
+        const gameButtons = document.querySelectorAll('.game-btn');
+        const backBtn = document.getElementById('back-btn');
+
+        // Sounds
+        const endScreenSound = new Audio('endsound.mp3');
+        const gameClickSound = new Audio('gameclick.mp3'); // correct number
+        const wrongSound = new Audio('wrong.mp3');         // wrong number
+
+        let score = 0;
+        let timeLeft = 30;
+        let currentNumber = 0;
+        let typedNumber = '';
+        let timerInterval;
+
+        // High score
+        let highScore = localStorage.getItem('numberGameHighScore') || 0;
+        document.getElementById('high-score').textContent = highScore;
+
+        function startNumberGame() {
+            score = 0;
+            timeLeft = 30;
+            typedNumber = '';
+            document.getElementById('score').textContent = score;
+            document.getElementById('time-left').textContent = timeLeft;
+            document.getElementById('end-screen').style.display = 'none';
+            spawnNumber();
+
+            clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-left').textContent = timeLeft;
+                if(timeLeft <= 0){
+                    clearInterval(timerInterval);
+                    showEndScreen();
+                }
+            }, 1000);
+        }
+
+        function spawnNumber() {
+            currentNumber = Math.floor(Math.random() * 99) + 1;
+            document.getElementById('current-number').textContent = currentNumber;
+            typedNumber = '';
+        }
+
+        function playGameClickSound() {
+            const sound = gameClickSound.cloneNode();
+            sound.play();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(document.getElementById('end-screen').style.display === 'block') return;
+            if(e.key >= '0' && e.key <= '9'){
+                typedNumber += e.key;
+
+                if(parseInt(typedNumber) === currentNumber){
+                    score++;
+                    document.getElementById('score').textContent = score;
+                    playGameClickSound(); // correct number
+                    spawnNumber();
+                } else if(parseInt(typedNumber) > currentNumber){
+                    typedNumber = '';
+                    wrongSound.currentTime = 0;
+                    wrongSound.play(); // wrong number sound
+                }
+            }
+        });
+
+        function showEndScreen(){
+            bgm.pause();
+            document.getElementById('final-score').textContent = score;
+            if(score > highScore){
+                highScore = score;
+                localStorage.setItem('numberGameHighScore', highScore);
+            }
+            document.getElementById('final-highscore').textContent = highScore;
+            document.getElementById('end-screen').style.display = 'block';
+            endScreenSound.currentTime = 0;
+            endScreenSound.play();
+        }
+
+        function playAgain(){
+            document.getElementById('end-screen').style.display = 'none';
+            endScreenSound.pause();
+            bgm.play();
+            startNumberGame();
+        }
+
+        // --- Handle game buttons in hub ---
+        gameButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const game = btn.dataset.game;
+                if(game === 'number-key-game'){
+                    introScreen.style.display = 'none';
+                    gameSection.style.display = 'block';
+                    bgm.play().catch(()=>{});
+                    startNumberGame();
+                }
+                // Later add other games here
+            });
+        });
+
+        // --- Back Button ---
+        backBtn.addEventListener('click', () => {
+            clearInterval(timerInterval); // stop timer
+            gameSection.style.display = 'none';
+            document.getElementById('end-screen').style.display = 'none';
+            introScreen.style.display = 'flex'; // show main hub
+            bgm.pause(); // stop BGM
+        });
+    </script>
+</body>
+</html>
