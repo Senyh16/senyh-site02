@@ -12,7 +12,7 @@
 <div id="intro-screen">
     <h1>SENYH SITE</h1>
     <h2>Choose a Game</h2>
-    <button class="game-btn" data-game="number-key-game">Press The Correct Number Game</button>
+    <button class="game-btn" data-game="number-key-game">Press The Correct Numbers Game</button>
 </div>
 
 <!-- BGM -->
@@ -30,7 +30,7 @@
 
     <div id="current-number"></div>
 
-    <!-- 🔥 MOBILE NUMBER PAD -->
+    <!-- MOBILE NUMBER PAD -->
     <div id="number-pad">
         <button class="num-btn">1</button>
         <button class="num-btn">2</button>
@@ -46,7 +46,7 @@
 
     <!-- END SCREEN -->
     <div id="end-screen">
-        <h1>Nays One! PALO!🔥</h1>
+        <h1>Nayszs One! PALO!</h1>
         <p>Your Score: <span id="final-score">0</span></p>
         <p>High Score: <span id="final-highscore">0</span></p>
         <button onclick="playAgain()">Play Again</button>
@@ -75,6 +75,7 @@ let timerInterval;
 let highScore = localStorage.getItem('numberGameHighScore') || 0;
 document.getElementById('high-score').textContent = highScore;
 
+// --- START GAME ---
 function startNumberGame(){
     score = 0;
     timeLeft = 30;
@@ -98,18 +99,27 @@ function startNumberGame(){
     }, 1000);
 }
 
+// --- SPAWN NUMBER ---
 function spawnNumber(){
     currentNumber = Math.floor(Math.random() * 99) + 1;
     document.getElementById('current-number').textContent = currentNumber;
     typedNumber = '';
 }
 
-function playCorrectSound(){
+// --- PLAY CORRECT SOUND + BOUNCE ---
+function playCorrectSound(button){
     const sound = gameClickSound.cloneNode();
     sound.play();
+
+    // Bounce effect on correct press
+    if(button){
+        button.style.transform = "scale(1.3)";
+        setTimeout(()=>{ button.style.transform = ""; }, 120);
+    }
 }
 
-function handleInput(digit){
+// --- HANDLE INPUT ---
+function handleInput(digit, button){
     if(document.getElementById('end-screen').style.display === 'block') return;
 
     typedNumber += digit;
@@ -117,30 +127,37 @@ function handleInput(digit){
     if(parseInt(typedNumber) === currentNumber){
         score++;
         document.getElementById('score').textContent = score;
-        playCorrectSound();
+        playCorrectSound(button);
         spawnNumber();
     }
     else if(parseInt(typedNumber) > currentNumber){
         typedNumber = '';
         wrongSound.currentTime = 0;
         wrongSound.play();
+
+        // Optional: shrink button briefly on wrong press
+        if(button){
+            button.style.transform = "scale(0.9)";
+            setTimeout(()=>{ button.style.transform = ""; }, 100);
+        }
     }
 }
 
-// Keyboard support
+// --- KEYBOARD SUPPORT ---
 document.addEventListener('keydown', (e) => {
     if(e.key >= '0' && e.key <= '9'){
         handleInput(e.key);
     }
 });
 
-// Click / Tap support
+// --- NUMBER BUTTON TAP / CLICK ---
 numberButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        handleInput(btn.textContent);
+        handleInput(btn.textContent, btn);
     });
 });
 
+// --- END SCREEN ---
 function showEndScreen(){
     bgm.pause();
 
@@ -158,6 +175,7 @@ function showEndScreen(){
     endScreenSound.play();
 }
 
+// --- PLAY AGAIN ---
 function playAgain(){
     document.getElementById('end-screen').style.display = 'none';
     endScreenSound.pause();
@@ -165,6 +183,7 @@ function playAgain(){
     startNumberGame();
 }
 
+// --- GAME BUTTONS ---
 gameButtons.forEach(btn => {
     btn.addEventListener('click', () => {
         introScreen.style.display = 'none';
@@ -174,6 +193,7 @@ gameButtons.forEach(btn => {
     });
 });
 
+// --- BACK BUTTON ---
 backBtn.addEventListener('click', () => {
     clearInterval(timerInterval);
     gameSection.style.display = 'none';
@@ -185,6 +205,7 @@ backBtn.addEventListener('click', () => {
 
 </body>
 </html>
+
 
 
 
