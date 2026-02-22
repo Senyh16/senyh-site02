@@ -128,3 +128,30 @@ section {
     font-size: 28px;
     font-weight: bold;
 }
+
+/* ------------------ Number Button Press & Bounce Fix ------------------ */
+
+/* Smooth transition for number buttons */
+.num-btn {
+    transition: transform 0.08s ease;
+    -webkit-tap-highlight-color: transparent; /* Removes mobile tap highlight */
+}
+
+/* Shrink when pressing (click or tap) */
+.num-btn:active {
+    transform: scale(0.9) !important;
+    box-shadow: 2px 2px 0 #000;
+}
+
+/* Remove outline when focused on mobile */
+.num-btn:focus {
+    outline: none;
+}
+
+/* Hover effect only for devices that support hover */
+@media (hover: hover) {
+    .num-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 6px 6px 0 #000;
+    }
+}
